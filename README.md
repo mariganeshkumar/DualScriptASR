@@ -19,5 +19,4 @@ Follow the below-given steps to repeat the results.
 5. Run 'bash run_blind_decoding.sh' 
 6. 'run_blind_decoding.sh' will decode the blind data and create two submission files in the root directory. The submission files follow the format given in https://navana-tech.github.io/IS21SS-indicASRchallenge/btest.html 
 
-
-
+Note: 'run_blind_decoding.sh' will consume 60 CPU threads by default. To reduce the GPU threads use 'bash run_blind_decoding.sh -nj \[number of threads\]'
