@@ -68,6 +68,21 @@ dumpdir=dump/
 . ./path.sh || exit 1;
 . ./cmd.sh || exit 1;
 
+if [ ! -f "subtask1.zip" ] && [ ! -f "subtask1.zip" ]; then
+    echo "Pretrained models not found. \
+     Please download the model zip files \
+     and place them in below-given folder"
+    echo $PWD
+    exit -1 
+fi
+
+rm -rf exp
+mkdir exp
+echo "Unpacking pre-trained models"
+unzip subtask1.zip -d exp/subtask1
+unzip subtask2.zip -d exp/subtask2
+
+
 train_set=subtask1
 expdir=exp/subtask1
 dict=${expdir}/${train_set}_units.txt
@@ -111,27 +126,27 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     opt="--log"
 
 
-    decode_dir=decode_blind-test-task1_${recog_model}_$(basename ${decode_config%.*})_${lmtag}
+    decode_dir=exp/decode_blind-test-task1_${recog_model}_$(basename ${decode_config%.*})_${lmtag}
     
 
     lang_model=rnnlm.model.best
 
     # set batchsize 0 to disable batch decoding
-    ${decode_cmd} JOB=1:${nj} ${expdir}/${decode_dir}/log/decode.JOB.log \
+    ${decode_cmd} JOB=1:${nj} ${decode_dir}/log/decode.JOB.log \
         asr_dual_recog.py \
         --config ${decode_config} \
         --ngpu ${ngpu} \
         --backend ${backend} \
         --batchsize 0 \
         --recog-json ${feat_recog_dir}/split${nj}utt/data.JOB.json \
-        --result-label ${expdir}/${decode_dir}/data.JOB.json \
+        --result-label ${decode_dir}/data.JOB.json \
         --model ${expdir}/${recog_model}  \
         --model-conf ${expdir}/model.json \
         --api v2 \
         --rnnlm ${expdir}/${lang_model} \
         --rnnlm-conf ${expdir}/rnnlm-model.json
 
-    d_dir=${expdir}/${decode_dir}
+    d_dir=${decode_dir}
 
     concatjson.py ${d_dir}/data.*.json > ${d_dir}/data.json
 
@@ -198,22 +213,22 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
         recog_model=model.val${n_average}.avg.best
         opt="--log ${expdir}/results/log"
 
-        decode_dir=decode_blind-test-task2-${rtask}_${recog_model}_$(basename ${decode_config%.*})_${lmtag}
+        decode_dir=exp/decode_blind-test-task2-${rtask}_${recog_model}_$(basename ${decode_config%.*})_${lmtag}
         
 
         # set batchsize 0 to disable batch decoding
-        ${decode_cmd} JOB=1:${nj} ${expdir}/${decode_dir}/log/decode.JOB.log \
+        ${decode_cmd} JOB=1:${nj} ${decode_dir}/log/decode.JOB.log \
             asr_dual_recog.py \
             --config ${decode_config} \
             --ngpu ${ngpu} \
             --backend ${backend} \
             --batchsize 0 \
             --recog-json ${feat_recog_dir}/split${nj}utt/data.JOB.json \
-            --result-label ${expdir}/${decode_dir}/data.JOB.json \
+            --result-label ${decode_dir}/data.JOB.json \
             --model ${expdir}/${recog_model}  \
             --api v2 
 
-        d_dir=${expdir}/${decode_dir}
+        d_dir=${decode_dir}
 
         concatjson.py ${d_dir}/data.*.json > ${d_dir}/data.json
 
