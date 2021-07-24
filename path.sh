@@ -1,4 +1,4 @@
-MAIN_ROOT=/common/software/espnet-0.9.6/
+MAIN_ROOT=espnet_root/
 KALDI_ROOT=$MAIN_ROOT/tools/kaldi
 LD_LIBRARY_PATH=
 PYTHONPATH=
