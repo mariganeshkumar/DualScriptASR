@@ -7,7 +7,7 @@
 
 # general configuration
 backend=pytorch
-stage=2      
+stage=1      
 stop_stage=2
 ngpu=2         # number of gpus ("0" uses cpu, otherwise use gpu)
 nj=60
