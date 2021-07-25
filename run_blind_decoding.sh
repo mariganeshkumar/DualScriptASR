@@ -184,7 +184,7 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     for rtask in ${task2_blind_set}; do
     
         python local/blind_data_prep_task2.py --source \
-                subtask2_blindtest/${rtask}/  --destination data/blind-test-task2-${rtask}
+                subtask2_blindtest/blind_test/${rtask}/  --destination data/blind-test-task2-${rtask}
         fbankdir=${dumpdir}/fbank         
         local/fix_data_dir.sh data/blind-test-task2-${rtask}
 
