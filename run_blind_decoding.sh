@@ -167,7 +167,7 @@ train_set=subtask2
 expdir=exp/subtask2
 dict=${expdir}/${train_set}_${bpemode}${nbpe}_units.txt
 bpemodel=${expdir}/${train_set}_${bpemode}${nbpe}
-task2_blind_set="Bengali-English Hindi-English"
+task2_blind_set="bengali hindi"
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     echo "stage 2: Decoding Blind Data"
     if [ ! -d "subtask2_blindtest/" ] 
@@ -184,7 +184,7 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     for rtask in ${task2_blind_set}; do
     
         python local/blind_data_prep_task2.py --source \
-                /speech/datasets/IndicASRChallenge/blind_test2/${rtask}/  --destination data/blind-test-task2-${rtask}
+                subtask2_blindtest/${rtask}/  --destination data/blind-test-task2-${rtask}
         fbankdir=${dumpdir}/fbank         
         local/fix_data_dir.sh data/blind-test-task2-${rtask}
 
